@@ -1,38 +1,344 @@
-.App {
-  text-align: center;
+/* Reset default margin and padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Global body styles */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  transition: background-color 0.3s ease;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.dark-mode {
+  background-color: #2e2e2e;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Chat App Container */
+.chat-app {
+  width: 100%;
+  max-width: 450px;
+  background-color: white;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dark-mode .chat-app {
+  background-color: #333;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Header */
+.chat-header {
+  background-color: #4CAF50;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+  position: relative;
+}
+
+.dark-mode .chat-header {
+  background-color: #222;
+}
+
+/* Dark Mode Toggle Button */
+.dark-mode-toggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  outline: none;
+}
+
+.dark-mode .dark-mode-toggle {
+  background-color: #555;
+}
+
+.dark-mode-toggle svg {
+  width: 20px;
+  height: 20px;
+  fill: #4CAF50;
+}
+
+.dark-mode .dark-mode-toggle svg {
+  fill: white;
+}
+
+/* Chat Window */
+.chat-window {
+  padding: 15px;
+  height: 350px;
+  overflow-y: auto;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s ease;
+}
+
+.dark-mode .chat-window {
+  background-color: #2b2b2b;
+}
+
+/* Message Bubbles */
+.message {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  animation: fadeIn 0.3s ease;
+}
+
+.message .avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.message .bubble {
+  max-width: 70%;
+  padding: 10px;
+  border-radius: 15px;
+  background-color: #4CAF50;
+  color: white;
+  position: relative;
+}
+
+.dark-mode .message .bubble {
+  background-color: #444;
+}
+
+.message.received .bubble {
+  background-color: #e5e5ea;
+  color: black;
+}
+
+.dark-mode .message.received .bubble {
+  background-color: #555;
+}
+
+.message .bubble::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 10px solid transparent;
+}
+
+.message.sent .bubble::before {
+  right: -20px;
+  border-left-color: #4CAF50;
+}
+
+.dark-mode .message.sent .bubble::before {
+  border-left-color: #444;
+}
+
+.message.received .bubble::before {
+  left: -20px;
+  border-right-color: #e5e5ea;
+}
+
+.dark-mode .message.received .bubble::before {
+  border-right-color: #555;
+}
+
+/* Message Input */
+.message-input {
+  display: flex;
+  border-top: 1px solid #ddd;
+  padding: 10px;
+  background-color: white;
+  transition: background-color 0.3s ease;
+}
+
+.dark-mode .message-input {
+  background-color: #333;
+  border-top: 1px solid #444;
+}
+
+.message-input input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  background-color: #f1f1f1;
+  outline: none;
+  font-size: 1rem;
+  margin-right: 10px;
+}
+
+.dark-mode .message-input input {
+  background-color: #555;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.message-input button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 0 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
 }
 
-@keyframes App-logo-spin {
+.message-input button:hover {
+  background-color: #45a049;
+}
+
+.dark-mode .message-input button {
+  background-color: #444;
+}
+
+.dark-mode .message-input button:hover {
+  background-color: #555;
+}
+
+/* Scrollbar */
+.chat-window::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat-window::-webkit-scrollbar-thumb {
+  background-color: #4CAF50;
+  border-radius: 4px;
+}
+
+.chat-window::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+.dark-mode .chat-window::-webkit-scrollbar-track {
+  background-color: #333;
+}
+
+.dark-mode .chat-window::-webkit-scrollbar-thumb {
+  background-color: #666;
+}
+
+/* Typing Indicator */
+.typing-indicator {
+  font-size: 0.9rem;
+  color: #999;
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+/* Animations */
+@keyframes fadeIn {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
+    transform: translateY(10px);
   }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    transform: translateY(0);
   }
+}
+
+/* Username input screen */
+.username-screen {
+  padding: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f9;
+  transition: background-color 0.3s ease;
+}
+
+.dark-mode .username-screen {
+  background-color: #2e2e2e;
+}
+
+.username-screen h1 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.dark-mode .username-screen h1 {
+  color: white;
+}
+
+.username-screen input {
+  width: 80%;
+  max-width: 300px;
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  margin-bottom: 15px;
+  outline: none;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark-mode .username-screen input {
+  background-color: #555;
+  border-color: #444;
+  color: white;
+}
+
+.username-screen input:focus {
+  border-color: #4CAF50;
+}
+
+.dark-mode .username-screen input:focus {
+  border-color: #4CAF50;
+}
+
+.username-screen button {
+  width: 80%;
+  max-width: 300px;
+  padding: 12px;
+  font-size: 1.2rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.username-screen button:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+
+.username-screen button:active {
+  background-color: #3d8d42;
+  transform: translateY(0);
+}
+
+.dark-mode .username-screen button {
+  background-color: #444;
+}
+
+.dark-mode .username-screen button:hover {
+  background-color: #555;
+}
+
+.dark-mode .username-screen button:active {
+  background-color: #3d3d3d;
 }
