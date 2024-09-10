@@ -7,32 +7,26 @@ function App() {
   const [username, setUsername] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const [error, setError] = useState('');
   const chatWindowRef = useRef(null);
 
   useEffect(() => {
-    let isMounted = true;
-
+    // Fetch messages from the server
     const fetchMessages = async () => {
       try {
         const response = await fetch('https://chatserver-psi.vercel.app/messages');
-        if (!response.ok) throw new Error('Network response was not ok');
-        const data = await response.json();
-        if (isMounted) setChat(data);
+        if (response.ok) {
+          const data = await response.json();
+          setChat(data);
+        } else {
+          console.error('Error fetching messages:', response.statusText);
+        }
       } catch (error) {
         console.error('Error fetching messages:', error);
-        if (isMounted) setError('Failed to fetch messages.');
       }
     };
 
     fetchMessages();
 
-    return () => {
-      isMounted = false;
-    };
-  }, [chat]);
-
-  useEffect(() => {
     // Auto-scroll chat window
     if (chatWindowRef.current) {
       chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
@@ -49,14 +43,21 @@ function App() {
           },
           body: JSON.stringify({ sender: username, content: message }),
         });
-        if (!response.ok) throw new Error('Network response was not ok');
-        setMessage('');
-        const updatedResponse = await fetch('https://chatserver-psi.vercel.app/messages');
-        const updatedData = await updatedResponse.json();
-        setChat(updatedData);
+        if (response.ok) {
+          setMessage('');
+          // Refresh chat messages
+          const res = await fetch('https://chatserver-psi.vercel.app/messages');
+          if (res.ok) {
+            const data = await res.json();
+            setChat(data);
+          } else {
+            console.error('Error fetching messages after sending:', res.statusText);
+          }
+        } else {
+          console.error('Error sending message:', response.statusText);
+        }
       } catch (error) {
         console.error('Error sending message:', error);
-        setError('Failed to send message.');
       }
     }
   };
@@ -74,7 +75,6 @@ function App() {
   return (
     <div className={darkMode ? 'dark-mode' : ''}>
       <div className="chat-app">
-        {error && <div className="error">{error}</div>}
         {!isLoggedIn ? (
           <div className="username-screen">
             <h1>Enter your username to join the chat</h1>
