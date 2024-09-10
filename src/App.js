@@ -36,7 +36,8 @@ function App() {
   const sendMessage = async () => {
     if (message.trim()) {
       try {
-        console.log('Sending message:', { sender: username, recipient: 'some-recipient-id', content: message });
+        const recipient = 'some-recipient-id'; // Replace with actual recipient ID
+        console.log('Sending message:', { sender: username, recipient, content: message });
         const response = await fetch('https://chatserver-psi.vercel.app/messages', {
           method: 'POST',
           headers: {
@@ -44,29 +45,29 @@ function App() {
           },
           body: JSON.stringify({
             sender: username,
-            recipient: 'some-recipient-id', // Replace with actual recipient ID
+            recipient,
             content: message
           }),
         });
-        if (!response.ok) {
+
+        if (response.ok) {
+          setMessage('');
+          // Refresh chat messages
+          const data = await fetch('https://chatserver-psi.vercel.app/messages');
+          const messages = await data.json();
+          setChat(messages);
+        } else {
           const errorText = await response.text();
           console.error('Error response from server:', errorText);
         }
-        setMessage('');
-        // Refresh chat messages
-        const data = await fetch('https://chatserver-psi.vercel.app/messages');
-        const messages = await data.json();
-        setChat(messages);
       } catch (error) {
         console.error('Error sending message:', error);
       }
     }
   };
-  
-  
 
   const toggleDarkMode = () => {
-    setDarkMode((prevMode) => !prevMode);
+    setDarkMode(prevMode => !prevMode);
   };
 
   const login = () => {

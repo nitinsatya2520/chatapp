@@ -342,3 +342,22 @@ body {
 .dark-mode .username-screen button:active {
   background-color: #3d3d3d;
 }
+/* Media Query for Small Screens */
+@media (max-width: 600px) {
+  .chat-app {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .chat-header {
+    font-size: 1.2rem;
+  }
+  
+  .message-input input {
+    font-size: 0.9rem;
+  }
+  
+  .message-input button {
+    font-size: 0.9rem;
+  }
+}
