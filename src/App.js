@@ -3,7 +3,6 @@ import './App.css';
 
 function App() {
   const [message, setMessage] = useState('');
-  const [recipient, setRecipient] = useState('');
   const [chat, setChat] = useState([]);
   const [username, setUsername] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,14 +30,14 @@ function App() {
   }, [chat]);
 
   const sendMessage = async () => {
-    if (message.trim() && recipient.trim()) {
+    if (message.trim()) {
       try {
         await fetch('https://chatserver-psi.vercel.app/messages', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ sender: username, recipient, content: message }),
+          body: JSON.stringify({ sender: username, content: message }),
         });
         setMessage('');
         // Refresh chat messages
@@ -102,12 +101,6 @@ function App() {
               ))}
             </div>
             <div className="message-input">
-              <input
-                type="text"
-                value={recipient}
-                onChange={(e) => setRecipient(e.target.value)}
-                placeholder="Recipient username"
-              />
               <input
                 type="text"
                 value={message}
