@@ -101,13 +101,17 @@ body {
 
 .navbar a:hover {
   background-color: #00b406;
-  border-radius: 25px;
 }
 
 /* Body padding to prevent content overlap */
+.dark-mode .navbar a{
+  color: #222;
+  background-color: #b8b8b8;
+}
 
-
-
+.dark-mode .navbar a:hover {
+  background-color: #ffffff;
+}
 .dark-mode .chat-header {
   background-color: #222;
 }
