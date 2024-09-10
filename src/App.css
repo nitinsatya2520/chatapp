@@ -95,12 +95,12 @@ body {
   text-decoration: none;
   font-size: 18px;
   padding: 10px 20px;
-  background-color: #00b406;
+  background-color: #4CAF50;
   border-radius: 25px;
 }
 
 .navbar a:hover {
-  background-color: #4CAF50;
+  background-color: #00b406;
   border-radius: 25px;
 }
 
