@@ -5,6 +5,7 @@ function App() {
   const [message, setMessage] = useState('');
   const [chat, setChat] = useState([]);
   const [username, setUsername] = useState('');
+  const [recipient, setRecipient] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const chatWindowRef = useRef(null);
@@ -30,14 +31,14 @@ function App() {
   }, [chat]);
 
   const sendMessage = async () => {
-    if (message.trim()) {
+    if (message.trim() && recipient.trim()) {
       try {
         await fetch('https://chatserver-psi.vercel.app/messages', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ username, message }),
+          body: JSON.stringify({ sender: username, recipient, content: message }),
         });
         setMessage('');
         // Refresh chat messages
@@ -92,14 +93,20 @@ function App() {
             </div>
             <div className="chat-window" ref={chatWindowRef}>
               {chat.map((msg, index) => (
-                <div key={index} className={`message ${msg.username === username ? 'sent' : 'received'}`}>
+                <div key={index} className={`message ${msg.sender === username ? 'sent' : 'received'}`}>
                   <div className="bubble">
-                    <strong>{msg.username}:</strong> {msg.message}
+                    <strong>{msg.sender}:</strong> {msg.content}
                   </div>
                 </div>
               ))}
             </div>
             <div className="message-input">
+              <input
+                type="text"
+                value={recipient}
+                onChange={(e) => setRecipient(e.target.value)}
+                placeholder="Recipient username"
+              />
               <input
                 type="text"
                 value={message}
