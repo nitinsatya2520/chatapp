@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import './App.css';
 
-const socket = io('https://chatserver-psi.vercel.app/');
+const socket = io('https://chatserver-psi.vercel.app', {
+  transports: ['websocket', 'polling'],  // Ensure fallback to polling in case WebSocket fails
+  withCredentials: true
+});
+
 
 function App() {
   const [message, setMessage] = useState('');
