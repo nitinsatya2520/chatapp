@@ -19,10 +19,12 @@ body {
 
 .dark-mode {
   background-color: #2e2e2e;
+  border-radius: 10px;
 }
 
 /* Chat App Container */
 .chat-app {
+  position: relative; /* Ensure the button is positioned relative to this container */
   width: 100%;
   max-width: 450px;
   background-color: white;
@@ -33,6 +35,7 @@ body {
   flex-direction: column;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
+
 
 .dark-mode .chat-app {
   background-color: #333;
@@ -205,6 +208,8 @@ body {
   background-color: #45a049;
 }
 
+
+
 .dark-mode .message-input button {
   background-color: #444;
 }
@@ -242,6 +247,32 @@ body {
   margin-bottom: 10px;
   font-style: italic;
 }
+
+.leave-chat {
+  background-color: #f44336; /* Red color for danger */
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  outline: none;
+  
+  bottom: 10px; /* Distance from the top edge */
+  left: 10px; /* Distance from the left edge */
+}
+
+.leave-chat:hover {
+  background-color: #e53935; /* Slightly darker red on hover */
+  transform: translateY(-2px);
+}
+
+.leave-chat:active {
+  background-color: #c62828; /* Even darker red on click */
+  transform: translateY(0);
+}
+
 
 /* Animations */
 @keyframes fadeIn {
