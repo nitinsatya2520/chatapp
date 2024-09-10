@@ -3,10 +3,9 @@ import io from 'socket.io-client';
 import './App.css';
 
 const socket = io('https://chatserver-psi.vercel.app', {
-  transports: ['websocket', 'polling'],  // Ensure fallback to polling in case WebSocket fails
-  withCredentials: true
+  transports: ['websocket', 'polling'], // Fallback to polling if WebSocket fails
+  withCredentials: true,
 });
-
 
 function App() {
   const [message, setMessage] = useState('');
@@ -15,6 +14,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [typingTimeout, setTypingTimeout] = useState(null);
 
   useEffect(() => {
     socket.on('message', (payload) => {
@@ -24,15 +24,26 @@ function App() {
     socket.on('typing', (typingUser) => {
       if (typingUser !== username) {
         setIsTyping(true);
-        setTimeout(() => setIsTyping(false), 2000);
+        clearTimeout(typingTimeout);
+        setTypingTimeout(setTimeout(() => setIsTyping(false), 2000));
       }
+    });
+
+    socket.on('connect_error', () => {
+      alert('Connection failed. Please try again later.');
     });
 
     return () => {
       socket.off('message');
       socket.off('typing');
     };
-  }, [username]);
+  }, [username, typingTimeout]);
+
+  useEffect(() => {
+    // Scroll to the latest message when the chat updates
+    const chatWindow = document.querySelector('.chat-window');
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }, [chat]);
 
   const sendMessage = () => {
     if (message.trim()) {
@@ -88,9 +99,8 @@ function App() {
             <div className="chat-window">
               {chat.map((msg, index) => (
                 <div key={index} className={`message ${msg.username === username ? 'sent' : 'received'}`}>
-                  
                   <div className="bubble">
-                    <strong>{msg.message}: </strong> {msg.username}
+                    <strong>{msg.username}:</strong> {msg.message}
                   </div>
                 </div>
               ))}
