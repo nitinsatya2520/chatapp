@@ -84,7 +84,7 @@ body {
   
   display: flex;
   justify-content: space-around;
-  background-color: #4CAF50;
+  
   padding: 10px 0;
   justify-content: space-around;
   
@@ -95,11 +95,13 @@ body {
   text-decoration: none;
   font-size: 18px;
   padding: 10px 20px;
+  background-color: #00b406;
+  border-radius: 25px;
 }
 
 .navbar a:hover {
-  background-color: #444;
-  border-radius: 5px;
+  background-color: #4CAF50;
+  border-radius: 25px;
 }
 
 /* Body padding to prevent content overlap */
