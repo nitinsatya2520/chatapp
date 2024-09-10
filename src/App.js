@@ -1,68 +1,53 @@
 import React, { useState, useEffect, useRef } from 'react';
-import io from 'socket.io-client';
 import './App.css';
-
-// Initialize WebSocket connection with error handling
-const socket = io('https://chatserver-psi.vercel.app', {
-  transports: ['websocket', 'polling'], // Fallback to polling if WebSocket fails
-  withCredentials: true,
-});
 
 function App() {
   const [message, setMessage] = useState('');
   const [chat, setChat] = useState([]);
   const [username, setUsername] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
-  const [typingTimeout, setTypingTimeout] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
   const chatWindowRef = useRef(null);
 
   useEffect(() => {
-    // Handle incoming messages
-    socket.on('message', (payload) => {
-      setChat((prevChat) => [...prevChat, payload]);
-    });
-
-    // Handle typing status
-    socket.on('typing', (typingUser) => {
-      if (typingUser !== username) {
-        setIsTyping(true);
-        clearTimeout(typingTimeout);
-        setTypingTimeout(setTimeout(() => setIsTyping(false), 2000));
+    // Fetch messages from the server
+    const fetchMessages = async () => {
+      try {
+        const response = await fetch('https://chatserver-psi.vercel.app/messages');
+        const data = await response.json();
+        setChat(data);
+      } catch (error) {
+        console.error('Error fetching messages:', error);
       }
-    });
-
-    // Handle connection errors
-    socket.on('connect_error', (error) => {
-      console.error('WebSocket connection error:', error);
-      alert('Connection failed. Please try again later.');
-    });
-
-    // Clean up listeners on component unmount
-    return () => {
-      socket.off('message');
-      socket.off('typing');
-      socket.off('connect_error');
     };
-  }, [username, typingTimeout]);
 
-  useEffect(() => {
+    fetchMessages();
+
     // Auto-scroll chat window
     if (chatWindowRef.current) {
       chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
     }
   }, [chat]);
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (message.trim()) {
-      socket.emit('message', { username, message });
-      setMessage('');
+      try {
+        await fetch('https://chatserver-psi.vercel.app/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, message }),
+        });
+        setMessage('');
+        // Refresh chat messages
+        const response = await fetch('https://chatserver-psi.vercel.app/messages');
+        const data = await response.json();
+        setChat(data);
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
     }
-  };
-
-  const handleTyping = () => {
-    socket.emit('typing', username);
   };
 
   const toggleDarkMode = () => {
@@ -113,14 +98,12 @@ function App() {
                   </div>
                 </div>
               ))}
-              {isTyping && <div className="typing-indicator">Someone is typing...</div>}
             </div>
             <div className="message-input">
               <input
                 type="text"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                onKeyUp={handleTyping}
                 placeholder="Type a message..."
               />
               <button onClick={sendMessage}>Send</button>
