@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import Navbar from './Navbar';
 
-function App() {
+function Chat() {
   const [message, setMessage] = useState('');
   const [chat, setChat] = useState([]);
   const [username, setUsername] = useState('');
@@ -102,11 +104,14 @@ function App() {
   };
 
   return (
+    <div>
     <div className={darkMode ? 'dark-mode' : ''}>
       <div className="chat-app">
         {!isLoggedIn ? (
+          
           <div className="username-screen">
             <h1>Enter your username to join the chat</h1>
+            
             <button className="dark-mode-toggle" onClick={toggleDarkMode}>
               {darkMode ? (
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -125,11 +130,18 @@ function App() {
               placeholder="Enter username"
             />
             <button onClick={login}>Join Chat</button>
+            
+            <div className="navbar">
+      <Link to="/">Home</Link>
+      <Link to="/about">About</Link>
+      
+      </div>
           </div>
         ) : (
           <div>
             <div className="chat-header">
               KNS Chat App
+              
               <button className="dark-mode-toggle" onClick={toggleDarkMode}>
                 {darkMode ? (
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -162,11 +174,49 @@ function App() {
               <button onClick={sendMessage}>Send</button>
             </div>
             <button className="leave-chat" onClick={handleLeaveChat}>Leave Chat</button>
+            <Link to="/about" className="leave-chat">About</Link>
+            
           </div>
         )}
       </div>
     </div>
+    </div>
   );
 }
+
+
+function About() {
+  return (
+    <div className="about-page">
+      <h1>About This Chat App</h1>
+      <p>
+        This is a simple chat application that allows users to join a chat room, send and receive messages, and toggle between dark and light modes.
+      </p>
+      <p>
+        The app fetches messages every 5 seconds and ensures that new messages appear at the top of the chat window. You can easily switch between chat and this About page using the navigation links.
+      </p>
+      <Link to="/">Back to Chat</Link>
+      
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <div>
+      <div className="chat-app">
+      <Routes>
+        <Route path="/" element={<Chat />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+      
+      
+      </div>
+      </div>
+    </Router>
+  );
+}
+
 
 export default App;
