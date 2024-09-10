@@ -66,6 +66,9 @@ body {
   height: 30px;
   cursor: pointer;
   outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .dark-mode .dark-mode-toggle {
@@ -75,7 +78,6 @@ body {
 .dark-mode-toggle svg {
   width: 20px;
   height: 20px;
-  fill: #4CAF50;
 }
 
 .dark-mode .dark-mode-toggle svg {
