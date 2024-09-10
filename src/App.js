@@ -10,7 +10,7 @@ function App() {
   const chatWindowRef = useRef(null);
 
   useEffect(() => {
-    // Fetch messages from the server
+    // Function to fetch messages from the server
     const fetchMessages = async () => {
       try {
         const response = await fetch('https://chatserver-psi.vercel.app/messages');
@@ -25,7 +25,13 @@ function App() {
       }
     };
 
-    fetchMessages();
+    fetchMessages(); // Initial fetch
+
+    // Set up polling to fetch messages every 5 seconds
+    const intervalId = setInterval(fetchMessages, 5000);
+
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
@@ -53,7 +59,7 @@ function App() {
 
         if (response.ok) {
           setMessage('');
-          // Refresh chat messages
+          // Optionally, fetch messages again to update the chat window
           const data = await fetch('https://chatserver-psi.vercel.app/messages');
           const messages = await data.json();
           setChat(messages);
@@ -77,7 +83,7 @@ function App() {
         body: JSON.stringify({ sender: username }),
       });
 
-      // Clear chat state
+      // Clear chat state and log out
       setChat([]);
       setIsLoggedIn(false);
     } catch (error) {
@@ -112,7 +118,6 @@ function App() {
                   </svg>
                 )}
               </button>
-            
             <input
               type="text"
               value={username}
