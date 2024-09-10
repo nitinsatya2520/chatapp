@@ -26,7 +26,9 @@ function App() {
     };
 
     fetchMessages();
+  }, []);
 
+  useEffect(() => {
     // Auto-scroll chat window
     if (chatWindowRef.current) {
       chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
@@ -37,7 +39,6 @@ function App() {
     if (message.trim()) {
       try {
         const recipient = 'some-recipient-id'; // Replace with actual recipient ID
-        console.log('Sending message:', { sender: username, recipient, content: message });
         const response = await fetch('https://chatserver-psi.vercel.app/messages', {
           method: 'POST',
           headers: {
@@ -63,6 +64,24 @@ function App() {
       } catch (error) {
         console.error('Error sending message:', error);
       }
+    }
+  };
+
+  const handleLeaveChat = async () => {
+    try {
+      await fetch('https://chatserver-psi.vercel.app/leave-chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ sender: username }),
+      });
+
+      // Clear chat state
+      setChat([]);
+      setIsLoggedIn(false);
+    } catch (error) {
+      console.error('Error leaving chat:', error);
     }
   };
 
@@ -125,6 +144,7 @@ function App() {
               />
               <button onClick={sendMessage}>Send</button>
             </div>
+            <button className="leave-chat" onClick={handleLeaveChat}>Leave Chat</button>
           </div>
         )}
       </div>
