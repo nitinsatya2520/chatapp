@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import './App.css';
 
+// Initialize WebSocket connection with error handling
 const socket = io('https://chatserver-psi.vercel.app', {
   transports: ['websocket', 'polling'], // Fallback to polling if WebSocket fails
   withCredentials: true,
@@ -13,14 +14,17 @@ function App() {
   const [username, setUsername] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
   const [typingTimeout, setTypingTimeout] = useState(null);
+  const [darkMode, setDarkMode] = useState(false);
+  const chatWindowRef = useRef(null);
 
   useEffect(() => {
+    // Handle incoming messages
     socket.on('message', (payload) => {
       setChat((prevChat) => [...prevChat, payload]);
     });
 
+    // Handle typing status
     socket.on('typing', (typingUser) => {
       if (typingUser !== username) {
         setIsTyping(true);
@@ -29,20 +33,25 @@ function App() {
       }
     });
 
-    socket.on('connect_error', () => {
+    // Handle connection errors
+    socket.on('connect_error', (error) => {
+      console.error('WebSocket connection error:', error);
       alert('Connection failed. Please try again later.');
     });
 
+    // Clean up listeners on component unmount
     return () => {
       socket.off('message');
       socket.off('typing');
+      socket.off('connect_error');
     };
   }, [username, typingTimeout]);
 
   useEffect(() => {
-    // Scroll to the latest message when the chat updates
-    const chatWindow = document.querySelector('.chat-window');
-    chatWindow.scrollTop = chatWindow.scrollHeight;
+    // Auto-scroll chat window
+    if (chatWindowRef.current) {
+      chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+    }
   }, [chat]);
 
   const sendMessage = () => {
@@ -96,7 +105,7 @@ function App() {
                 )}
               </button>
             </div>
-            <div className="chat-window">
+            <div className="chat-window" ref={chatWindowRef}>
               {chat.map((msg, index) => (
                 <div key={index} className={`message ${msg.username === username ? 'sent' : 'received'}`}>
                   <div className="bubble">
