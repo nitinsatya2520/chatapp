@@ -90,7 +90,8 @@ body {
 /* Chat Window */
 .chat-window {
   padding: 15px;
-  height: 350px;
+  height: 650px;
+  
   overflow-y: auto;
   background-color: #f9f9f9;
   transition: background-color 0.3s ease;
@@ -381,7 +382,7 @@ body {
   .chat-app {
     width: 100%;
     max-width: 100%;
-    border-radius: 10%;
+    
     box-shadow: none;
   }
   
