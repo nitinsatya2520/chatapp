@@ -3,9 +3,9 @@ import './App.css';
 
 function App() {
   const [message, setMessage] = useState('');
+  const [recipient, setRecipient] = useState('');
   const [chat, setChat] = useState([]);
   const [username, setUsername] = useState('');
-  const [recipient, setRecipient] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const chatWindowRef = useRef(null);
@@ -92,10 +92,11 @@ function App() {
               </button>
             </div>
             <div className="chat-window" ref={chatWindowRef}>
-              {chat.map((msg, index) => (
-                <div key={index} className={`message ${msg.sender === username ? 'sent' : 'received'}`}>
+              {chat.map((msg) => (
+                <div key={msg.id} className={`message ${msg.sender === username ? 'sent' : 'received'}`}>
                   <div className="bubble">
                     <strong>{msg.sender}:</strong> {msg.content}
+                    <div className="timestamp">{new Date(msg.timestamp).toLocaleTimeString()}</div>
                   </div>
                 </div>
               ))}
