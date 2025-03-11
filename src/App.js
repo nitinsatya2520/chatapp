@@ -5,6 +5,7 @@ import Navbar from './Navbar';
 import Login from './Login';
 import VideoCall from './VideoCall';
 import VideoMeeting from './VideoMeeting';
+
 function Chat() {
   const [message, setMessage] = useState('');
   const [chat, setChat] = useState([]);
@@ -134,9 +135,10 @@ function Chat() {
             <button onClick={login}>Join Chat</button>
             
             <div className="navbar">
-      <Link to="/">Home</Link>
+      <Link to="/login">Home</Link>
       <Link to="/about">About</Link>
       <Link to="/video-call">Video Call</Link>
+      
       </div>
           </div>
         ) : (
