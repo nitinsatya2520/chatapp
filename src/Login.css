@@ -1,0 +1,87 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    justify-content: center;
+    background-color: #1a1a1a; /* Dark background */
+    color: #4CAF50; /* Primary green accent */
+    font-family: 'Arial', sans-serif;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7); /* Depth effect */
+  }
+  
+  .login-container h1 {
+    margin-bottom: 20px;
+    font-size: 2.2rem;
+    text-shadow: 0 4px 15px rgba(76, 175, 80, 0.9); /* Glowing green effect */
+  }
+  
+  .login-container input {
+    width: 80%;
+    max-width: 300px;
+    padding: 12px;
+    border: 2px solid #66bb6a; /* Bright green outline for focus */
+    border-radius: 8px;
+    background-color: #2a2a2a; /* Dark input background */
+    color: #fff;
+    margin-bottom: 15px;
+    outline: none;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .login-container input:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 12px rgba(76, 175, 80, 0.8); /* Glowing effect */
+  }
+  
+  .login-container button {
+    width: 80%;
+    max-width: 300px;
+    padding: 12px;
+    background-color: #4CAF50; /* Vibrant green */
+    border: none;
+    border-radius: 8px;
+    color: #121212; /* Dark text for contrast */
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+  
+  .login-container button:hover {
+    background-color: #45a049; /* Slightly brighter green */
+    transform: translateY(-2px); /* Button lift effect */
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.8);
+  }
+  
+  .login-container button:active {
+    background-color: #3d8d42; /* Deeper green for click */
+    transform: translateY(0);
+  }
+  
+  /* Error Message Styling */
+  .error-message {
+    color: #ff4c4c; /* Red for errors */
+    background-color: #2a2a2a;
+    border: 1px solid #ff4c4c;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-top: 10px;
+    width: 80%;
+    max-width: 300px;
+    text-align: center;
+  }
+  
+  /* Media Query for Small Screens */
+  @media (max-width: 600px) {
+    .login-container h1 {
+      font-size: 1.6rem;
+    }
+  
+    .login-container input,
+    .login-container button {
+      width: 100%;
+    }
+  }
+  

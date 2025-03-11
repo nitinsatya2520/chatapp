@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Navbar from './Navbar';
-import Login from './Login';
 
 function Chat() {
   const [message, setMessage] = useState('');
@@ -203,20 +202,21 @@ function About() {
 }
 
 function App() {
-  const [username, setUsername] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   return (
     <Router>
+      <div>
       <div className="chat-app">
-        <Routes>
-          <Route path="/login" element={<Login setUsername={setUsername} setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path="/" element={isLoggedIn ? <Chat username={username} /> : <Login setUsername={setUsername} setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path="/about" element={<About />} />
-        </Routes>
+      <Routes>
+        <Route path="/" element={<Chat />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+      
+      
+      </div>
       </div>
     </Router>
   );
 }
+
 
 export default App;
