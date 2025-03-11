@@ -3,7 +3,8 @@ import './App.css';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import Login from './Login';
-
+import VideoCall from './VideoCall';
+import VideoMeeting from './VideoMeeting';
 function Chat() {
   const [message, setMessage] = useState('');
   const [chat, setChat] = useState([]);
@@ -135,7 +136,7 @@ function Chat() {
             <div className="navbar">
       <Link to="/">Home</Link>
       <Link to="/about">About</Link>
-      
+      <Link to="/video-call">Video Call</Link>
       </div>
           </div>
         ) : (
@@ -213,6 +214,8 @@ function App() {
           <Route path="/login" element={<Login setUsername={setUsername} setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/" element={isLoggedIn ? <Chat username={username} /> : <Login setUsername={setUsername} setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/about" element={<About />} />
+          <Route path="/video-call" element={<VideoCall username={username} />} />
+          <Route path="/video-meeting" element={<VideoMeeting />} />
         </Routes>
       </div>
     </Router>
